@@ -14,3 +14,12 @@ interfaces = dev.interfaces.all()
 int = dev.interfaces.get("1502")
 poll = dev.config.get("polling")
 ```
+
+# Changelog
+<!--
+    Placeholder for the next version (at the beginning of the line):
+    ## **WORK IN PROGRESS**
+-->
+
+## 0.0.1 (2022-06-01)
+* first working version
