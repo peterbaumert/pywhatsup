@@ -78,11 +78,6 @@ class Entry(object):
         for k, v in items:
             if isinstance(v, dict):
                 lookup = getattr(self.__class__, k, None)
-                if k in ["custom_fields", "local_context_data"] or hasattr(
-                    lookup, "_json_field"
-                ):
-                    setattr(self, k, v)
-                    continue
                 if lookup:
                     v = lookup(v, self.api, self.endpoint)
                 else:

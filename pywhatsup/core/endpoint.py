@@ -12,7 +12,7 @@ class Endpoint:
         self.url = "{base_url}/{app}/{id}/{endpoint}".format(
             base_url=self.api.base_url,
             app=self.app.app_name,
-            id=self.app.id if self.app.id else "-",
+            id=self.app.id,
             endpoint=self.endpoint_name,
         )
 
@@ -57,10 +57,3 @@ class Endpoint:
                 return None
             else:
                 raise e
-
-    def __getattr__(self, name):
-        data = self.get()
-        return getattr(data, name)
-
-    def __str__(self):
-        return str(self.data)
