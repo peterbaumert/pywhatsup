@@ -1,5 +1,5 @@
 from pywhatsup.core.result import Entry
 
 
-class Credentials(Entry):
+class Monitors(Entry):
     pass

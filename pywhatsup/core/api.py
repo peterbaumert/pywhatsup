@@ -15,6 +15,7 @@ class Api(object):
         self.credentials = App(self, "credentials")
         self.devices = App(self, "devices")
         self.device_groups = App(self, "device_groups")
+        self.monitors = App(self, "monitors")
 
     def login(self):
         data = {

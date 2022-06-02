@@ -1,4 +1,6 @@
-from pywhatsup.models import credentials, device_groups, devices
+from pywhatsup.core.result import Entries, Entry
+from pywhatsup.core.utils import Utils
+from pywhatsup.models import credentials, device_groups, devices, monitors
 from pywhatsup.core.endpoint import Endpoint
 from pywhatsup.core.request import Request
 
@@ -14,11 +16,21 @@ class App(object):
             id=self.id,
         )
         self._setmodel()
+        self.return_obj = self._lookup_ret_obj(name, self.model)
+
+    def _lookup_ret_obj(self, name, model):
+        if model:
+            name = name.title().replace("_", "")
+            ret = getattr(model, name, Entry)
+        else:
+            ret = Entry
+        return ret
 
     models = {
         "credentials": credentials,
         "devices": devices,
         "device_groups": device_groups,
+        "monitors": monitors,
     }
 
     def _setmodel(self):
@@ -39,16 +51,17 @@ class App(object):
                 app=self.app_name,
                 id=self.id,
             )
-            try:
-                req = Request(
-                    base_url=self.url,
-                    session=self.api.session,
-                )
-                items = next(req.get())["data"].items()
-                for k, v in items:
-                    setattr(self, k, v)
-            except:
-                pass
+        try:
+            req = Request(
+                base_url=self.url,
+                session=self.api.session,
+            )
+            # if self.id == "-":
+            entries = req.get()
+            for entry in entries:
+                Utils._parse_values(self, entry, Entry)
+        except:
+            pass
         return self
 
     def __getattr__(self, name):

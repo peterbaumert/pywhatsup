@@ -78,7 +78,10 @@ class Request(object):
             else:
                 first_run = True
                 for i in req["data"]:
-                    yield i
+                    if isinstance(i, dict):
+                        yield i
+                    else:
+                        yield {i: req["data"][i]}
                 while req["paging"].get("nextPageId"):
                     if first_run:
                         req = self._make_call(
@@ -98,7 +101,7 @@ class Request(object):
                 yield i
         else:
             self.count = len(req)
-            yield req
+            yield req["data"]
 
     def _make_call(self, verb="get", url_override=None, add_params=None, data=None):
         if verb in ("post", "put") or verb == "delete" and data:
